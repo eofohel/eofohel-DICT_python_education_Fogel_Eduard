@@ -1,65 +1,76 @@
-# Начальные ресурсы кофемашины
-water = 400
-milk = 540
-beans = 120
-cups = 9
-money = 550
+class CoffeeMachine:
+    def __init__(self):
+        self.water = 400
+        self.milk = 540
+        self.beans = 120
+        self.cups = 9
+        self.money = 550
 
-while True:
-    action = input("Write action (buy, fill, take, remaining, exit):\n")
+    def process_input(self, user_input):
+        if user_input == "buy":
+            self.buy_coffee()
+        elif user_input == "fill":
+            self.fill_machine()
+        elif user_input == "take":
+            self.take_money()
+        elif user_input == "remaining":
+            self.print_state()
 
-    if action == "exit":
-        break
-
-    elif action == "remaining":
+    def print_state(self):
         print("\nThe coffee machine has:")
-        print(f"{water} ml of water")
-        print(f"{milk} ml of milk")
-        print(f"{beans} g of coffee beans")
-        print(f"{cups} disposable cups")
-        print(f"${money} of money\n")
+        print(f"{self.water} ml of water")
+        print(f"{self.milk} ml of milk")
+        print(f"{self.beans} g of coffee beans")
+        print(f"{self.cups} disposable cups")
+        print(f"${self.money} of money\n")
 
-    elif action == "buy":
-        coffee_type = input("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:\n")
+    def buy_coffee(self):
+        choice = input("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:\n")
+        if choice == "back":
+            return
 
-        if coffee_type == "back":
-            continue
-
-        coffee_type = int(coffee_type)
-
-        # Рецепты напитков: [вода, молоко, зрна, стоимость]
+        choice = int(choice)
         recipes = {
             1: [250, 0, 16, 4],  # Espresso
             2: [350, 75, 20, 7],  # Latte
             3: [200, 100, 12, 6]  # Cappuccino
         }
 
-        if coffee_type in recipes:
-            req_water, req_milk, req_beans, cost = recipes[coffee_type]
+        if choice in recipes:
+            req_water, req_milk, req_beans, cost = recipes[choice]
 
-            # Проверка ресурсов
-            if water < req_water:
+            if self.water < req_water:
                 print("Sorry, not enough water!")
-            elif milk < req_milk:
+            elif self.milk < req_milk:
                 print("Sorry, not enough milk!")
-            elif beans < req_beans:
+            elif self.beans < req_beans:
                 print("Sorry, not enough coffee beans!")
-            elif cups < 1:
+            elif self.cups < 1:
                 print("Sorry, not enough disposable cups!")
             else:
                 print("I have enough resources, making you a coffee!")
-                water -= req_water
-                milk -= req_milk
-                beans -= req_beans
-                cups -= 1
-                money += cost
+                self.water -= req_water
+                self.milk -= req_milk
+                self.beans -= req_beans
+                self.cups -= 1
+                self.money += cost
 
-    elif action == "fill":
-        water += int(input("Write how many ml of water you want to add:\n"))
-        milk += int(input("Write how many ml of milk you want to add:\n"))
-        beans += int(input("Write how many grams of coffee beans you want to add:\n"))
-        cups += int(input("Write how many disposable cups you want to add:\n"))
+    def fill_machine(self):
+        self.water += int(input("Write how many ml of water you want to add:\n"))
+        self.milk += int(input("Write how many ml of milk you want to add:\n"))
+        self.beans += int(input("Write how many grams of coffee beans you want to add:\n"))
+        self.cups += int(input("Write how many disposable cups you want to add:\n"))
 
-    elif action == "take":
-        print(f"I gave you ${money}")
-        money = 0
+    def take_money(self):
+        print(f"I gave you ${self.money}")
+        self.money = 0
+
+
+# Запуск программы
+machine = CoffeeMachine()
+
+while True:
+    action = input("Write action (buy, fill, take, remaining, exit):\n")
+    if action == "exit":
+        break
+    machine.process_input(action)
